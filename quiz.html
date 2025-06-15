@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced IELTS Vocabulary Quiz</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
+    header { background: #4a90e2; color: white; padding: 20px; text-align: center; }
+    main { max-width: 700px; margin: 20px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .question-box { margin-bottom: 20px; }
+    .question { font-size: 20px; margin-bottom: 10px; }
+    .options button { display: block; width: 100%; margin: 5px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background: #f1f1f1; cursor: pointer; transition: 0.3s; }
+    .options button:hover { background: #e0e0ff; }
+    .feedback { margin-top: 10px; padding: 10px; border-radius: 5px; background: #eaf7ea; border: 1px solid #b2d8b2; }
+    .feedback.wrong { background: #ffe6e6; border-color: #ff9999; }
+    .progress { margin: 20px 0; font-weight: bold; text-align: center; }
+    .next-btn { display: block; margin: 20px auto; padding: 10px 20px; background: #4a90e2; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .next-btn:disabled { background: #ccc; cursor: not-allowed; }
+    .result { text-align: center; padding: 20px; font-size: 18px; }
+    @media(max-width: 600px) { .question { font-size: 18px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>IELTS Vocabulary Quiz</h1>
+    <p>Test and learn advanced vocabulary</p>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="question-box" id="quizBox"></div>
+    <button class="next-btn" id="nextBtn" disabled>Next</button>
+    <div class="result" id="resultBox" style="display:none"></div>
+  </main>
+  <script>
+    const questions = [
+      {
+        type: 'mcq',
+        question: "What does 'abhor' mean?",
+        options: ['to love', 'to tolerate', 'to hate', 'to encourage'],
+        answer: 2,
+        explanation: "'Abhor' means to hate or detest.",
+        example: "He began to abhor the sport after many injuries."
+      },
+      {
+        type: 'fill',
+        question: "Fill in the blank: The child’s _____ behavior annoyed everyone.",
+        answer: 'fractious',
+        explanation: "'Fractious' means troublesome or irritable.",
+        example: "The fractious child refused to sleep."
+      },
+      {
+        type: 'scenario',
+        question: "Maria secretly met someone after saying she's going to the library. This is a _____ meeting.",
+        options: ['amiable', 'clandestine', 'vociferous', 'gratuitous'],
+        answer: 1,
+        explanation: "'Clandestine' means secret or hidden.",
+        example: "They held a clandestine meeting at midnight."
+      },
+      {
+        type: 'mcq',
+        question: "Which word means extreme greed?",
+        options: ['candor', 'avarice', 'zenith', 'empathy'],
+        answer: 1,
+        explanation: "'Avarice' refers to excessive greed.",
+        example: "His avarice made him hoard money unfairly."
+      },
+      {
+        type: 'fill',
+        question: "Fill in the blank: He spoke with _____ during the wedding speech.",
+        answer: 'eloquence',
+        explanation: "'Eloquence' means fluent and persuasive speaking.",
+        example: "The audience was moved by his eloquence."
+      },
+      {
+        type: 'scenario',
+        question: "Neil gets along with everyone. He's described as:",
+        options: ['amiable', 'brusque', 'callous', 'furtive'],
+        answer: 0,
+        explanation: "'Amiable' means friendly and pleasant.",
+        example: "She had an amiable personality."
+      },
+      {
+        type: 'mcq',
+        question: "What does 'brazen' mean?",
+        options: ['shy', 'subtle', 'bold', 'unaware'],
+        answer: 2,
+        explanation: "'Brazen' means bold or shameless.",
+        example: "He made a brazen attempt to cheat."
+      },
+      {
+        type: 'fill',
+        question: "Fill in the blank: The CEO gave himself a raise, which _____ his motives.",
+        answer: 'debased',
+        explanation: "'Debased' means to lower in quality or value.",
+        example: "It debased the charity’s mission."
+      },
+      {
+        type: 'scenario',
+        question: "Someone flatters others only to gain something. This person is a:",
+        options: ['sycophant', 'maverick', 'candor', 'vex'],
+        answer: 0,
+        explanation: "'Sycophant' is someone who flatters for personal gain.",
+        example: "He was surrounded by sycophants at the office."
+      },
+      {
+        type: 'mcq',
+        question: "What does 'candor' mean?",
+        options: ['hostility', 'honesty', 'rage', 'compassion'],
+        answer: 1,
+        explanation: "'Candor' means honesty or openness.",
+        example: "Her candor was appreciated in the meeting."
+      },
+      {
+        type: 'fill',
+        question: "Fill in the blank: He was _____ by the surprise ending of the movie.",
+        answer: 'flabbergasted',
+        explanation: "'Flabbergasted' means extremely surprised.",
+        example: "She was flabbergasted by the results."
+      },
+      {
+        type: 'scenario',
+        question: "The speaker's words were clear and sharp. They were:",
+        options: ['obtuse', 'vociferous', 'incisive', 'quaint'],
+        answer: 2,
+        explanation: "'Incisive' means direct and sharp.",
+        example: "Her incisive comments helped clarify the issue."
+      },
+      {
+        type: 'mcq',
+        question: "Which word means incapable of being satisfied?",
+        options: ['insatiable', 'amicable', 'innate', 'meticulous'],
+        answer: 0,
+        explanation: "'Insatiable' means never satisfied.",
+        example: "His insatiable hunger for power was dangerous."
+      },
+      {
+        type: 'fill',
+        question: "Fill in the blank: His _____ attitude made the room tense.",
+        answer: 'truculent',
+        explanation: "'Truculent' means eager to fight or argue.",
+        example: "His truculent tone silenced the group."
+      },
+      {
+        type: 'scenario',
+        question: "Mark found money on the bus without looking for it. This is:",
+        options: ['modicum', 'serendipity', 'gratuitous', 'enmity'],
+        answer: 1,
+        explanation: "'Serendipity' is finding something valuable by chance.",
+        example: "Meeting her was pure serendipity."
+      }
+    ];
+
+    let current = 0, score = 0;
+    const quizBox = document.getElementById('quizBox');
+    const nextBtn = document.getElementById('nextBtn');
+    const resultBox = document.getElementById('resultBox');
+    const progress = document.getElementById('progress');
+
+    function showQuestion() {
+      const q = questions[current];
+      progress.textContent = `Question ${current + 1} of ${questions.length}`;
+      nextBtn.disabled = true;
+      let html = `<div class='question'>${q.question}</div>`;
+      if (q.type === 'mcq' || q.type === 'scenario') {
+        html += `<div class='options'>`;
+        q.options.forEach((opt, i) => {
+          html += `<button onclick='checkAnswer(${i})'>${opt}</button>`;
+        });
+        html += `</div>`;
+      } else if (q.type === 'fill') {
+        html += `<input id='fillInput' type='text' placeholder='Type your answer' style='width:100%;padding:10px;'> <br><br>`;
+        html += `<button onclick='checkAnswer()'>Submit</button>`;
+      }
+      quizBox.innerHTML = html;
+    }
+
+    function checkAnswer(userChoice) {
+      const q = questions[current];
+      let isCorrect = false;
+      let correctAnswer = '';
+      if (q.type === 'fill') {
+        const userText = document.getElementById('fillInput').value.trim().toLowerCase();
+        isCorrect = userText === q.answer.toLowerCase();
+        correctAnswer = q.answer;
+      } else {
+        isCorrect = userChoice === q.answer;
+        correctAnswer = q.options[q.answer];
+      }
+      if (isCorrect) score++;
+      let feedback = `<div class='feedback ${isCorrect ? '' : 'wrong'}'>`;
+      feedback += isCorrect ? '✅ Correct! ' : `❌ Incorrect. The correct answer is: <b>${correctAnswer}</b><br>`;
+      feedback += `${q.explanation}<br><i>Example:</i> ${q.example}`;
+      feedback += `</div>`;
+      quizBox.innerHTML += feedback;
+      nextBtn.disabled = false;
+    }
+
+    nextBtn.addEventListener('click', () => {
+      current++;
+      if (current < questions.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    });
+
+    function showResult() {
+      quizBox.style.display = 'none';
+      nextBtn.style.display = 'none';
+      progress.style.display = 'none';
+      let message = score >= 12 ? '🎉 Excellent vocabulary!' : score >= 8 ? '👍 Good job, keep reviewing!' : '📘 Review more to improve!';
+      resultBox.style.display = 'block';
+      resultBox.innerHTML = `<h2>Your Score: ${score} / ${questions.length}</h2><p>${message}</p>`;
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
